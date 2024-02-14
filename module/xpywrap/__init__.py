@@ -5,7 +5,6 @@ import _xpywrap #noqa
 import asyncio
 
 import nest_asyncio
-nest_asyncio.apply()
 
 
 
@@ -32,7 +31,9 @@ def runner(server):
             # run the event loop
             asyncio.run(async_pseudo_event_loop(server))
         else:
-            print("in event loop")
+            print("in event loop, nest_asyncio.apply()")
+            nest_asyncio.apply()
+
             # run as task
             task = asyncio.create_task(async_pseudo_event_loop(server))
 

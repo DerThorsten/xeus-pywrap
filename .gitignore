@@ -51,3 +51,7 @@ Untitled*.ipynb
 experiments.sh
 
 .DS_Store
+
+# python
+__pycache__/
+*.pyc
