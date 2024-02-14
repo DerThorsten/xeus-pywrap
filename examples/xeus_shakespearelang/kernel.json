@@ -1,0 +1,14 @@
+{
+    "argv": [ 
+        "~/src/xeus-pywrap/build_native/xpywrap",
+        "--module",
+        "xeus_shakespearelang",
+        "--factory",
+        "make_interpreter",
+        "--connection",
+        "{connection_file}"
+    ],
+    "display_name": "xeus-shakespearelang",
+    "language": "Shakespearelang"
+   }
+   

@@ -1,0 +1,14 @@
+{
+    "argv": [ 
+        "~/src/xeus-pywrap/build_native/xpywrap",
+        "--module",
+        "xeus_javascript",
+        "--factory",
+        "make_interpreter",
+        "--connection",
+        "{connection_file}"
+    ],
+    "display_name": "xeus-javascript",
+    "language": "JavaScript"
+   }
+   

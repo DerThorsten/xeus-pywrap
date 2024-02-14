@@ -1,0 +1,13 @@
+{
+  "display_name": "python 1.0.0 (xpywrap)",
+  "argv": [
+      "@XEUS_PYWRAP_KERNELSPEC_PATH@xpywrap",
+      "-m", 
+      "some_sample",
+      "-f",
+      "{connection_file}"
+  ],
+  "language": "python",
+  "metadata": {"debugger": false
+  }
+}
