@@ -58,6 +58,7 @@ class Interpreter(xpywrap.InterpreterBase):
     def execute_request(self, cb, execution_count, code, **kwargs):
         
         async def task():
+            print("in task")
             # async with self.cell_lock:
             try:
                 ret = await exec_with_return(code, globals(), locals())
@@ -77,7 +78,10 @@ class Interpreter(xpywrap.InterpreterBase):
             result_data =  {"text/plain": ""}
             if ret is not None:
                 result_data =  {"text/plain": repr(ret)}
+            
+            print("task done")
             self.publish_execution_result(execution_count, result_data)
+            cb(xpywrap.execute_ok_response(execution_count))
 
         if xeus_pywrap_python_config["use_cell_lock"]:
             async def wrapped_task():
@@ -89,7 +93,7 @@ class Interpreter(xpywrap.InterpreterBase):
         asyncio.create_task(wrapped_task())
 
 
-        cb(xpywrap.execute_ok_response(execution_count))
+        
 
 
 
