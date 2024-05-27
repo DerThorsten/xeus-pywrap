@@ -26,29 +26,27 @@
 #include "xeus/xkernel.hpp"
 #include "xeus/xkernel_configuration.hpp"
 #include "xeus-zmq/xserver_zmq.hpp"
+#include "xeus-zmq/xzmq_context.hpp"
 
 
 #include "xeus-pywrap/xinterpreter.hpp"
 #include "xeus-pywrap/xeus_pywrap_config.hpp"
 #include "xeus-pywrap/xaserver_zmq.hpp"
 
-#include "pybind11/embed.h"
+#include <pybind11/embed.h>
 
 
 
 namespace py = pybind11;
 
-namespace xeus_pywrap
+/*namespace xeus_pywrap
 {
     void export_pywrap(py::module& m);
-}
+}*/
 
 PYBIND11_EMBEDDED_MODULE(_xpywrap, m) {
     xeus_pywrap::export_pywrap(m);
 }
-
-
-
 
 #ifdef __GNUC__
 void handler(int sig)
@@ -142,7 +140,7 @@ int main(int argc, char* argv[])
     signal(SIGSEGV, handler);
 #endif
 
-    auto context = xeus::make_context<zmq::context_t>();
+    auto context = xeus::make_zmq_context();
 
     // Instantiating the xeus xinterpreter
     using interpreter_ptr = std::unique_ptr<xeus_pywrap::interpreter>;

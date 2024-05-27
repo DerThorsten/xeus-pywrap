@@ -41,27 +41,20 @@ namespace xeus_pywrap
     
     class XEUS_PYWRAP_API xaserver_zmq : public xeus::xserver_zmq
     {
-        public:
+    public:
 
+        
+        xaserver_zmq(xeus::xcontext& context,
+                     const xeus::xconfiguration& config,
+                     nl::json::error_handler_t eh);
         virtual ~xaserver_zmq() = default;
 
-        using xserver_zmq::xserver_zmq;
-        using xserver_zmq::send_shell_impl;
-        using xserver_zmq::send_control_impl;
-        using xserver_zmq::send_stdin_impl;
-        using xserver_zmq::publish_impl;
-        using xserver_zmq::abort_queue_impl;
-        using xserver_zmq::stop_impl;
-        using xserver_zmq::update_config_impl;
-
-
-
         void poll(long timeout);
+        bool stopped() const;
 
-        // custom start_impl method
+    private:
+
         void start_impl(xeus::xpub_message msg) override;
-
-        bool stopped();
-        
+        void stop_impl() override;
     };
 }

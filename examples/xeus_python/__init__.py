@@ -55,7 +55,7 @@ class Interpreter(xpywrap.InterpreterBase):
             )
         )
     
-    def execute_request(self, execution_count, code, **kwargs):
+    def execute_request(self, cb, execution_count, code, **kwargs):
         
         async def task():
             # async with self.cell_lock:
@@ -88,7 +88,7 @@ class Interpreter(xpywrap.InterpreterBase):
         asyncio.create_task(wrapped_task())
 
 
-        return xpywrap.execute_ok_response(execution_count)
+        cb(xpywrap.execute_ok_response(execution_count))
 
 
 

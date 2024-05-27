@@ -24,8 +24,9 @@ class InterpreterBase(ABC):
     # functions in a more "pythonic" way and may sanitize
     # input and output.
 
-    def _execute_request(self, execution_count, code, silent, store_history, user_expressions, allow_stdin):
-        return self.execute_request(
+    def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
+        self.execute_request(
+            cb=cb,
             execution_count=execution_count,
             code=code,
             silent=silent,

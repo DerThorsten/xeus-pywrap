@@ -31,6 +31,8 @@ namespace py = pybind11;
 
 namespace xeus_pywrap
 {
+    void export_pywrap(py::module& m);
+
     class XEUS_PYWRAP_API interpreter : public xeus::xinterpreter
     {
     public:
@@ -42,12 +44,18 @@ namespace xeus_pywrap
 
         void configure_impl() override;
 
-        nl::json execute_request_impl(int execution_counter,
+        void execute_request_impl(send_reply_callback callback,
+                                  int execution_counter,
+                                  const std::string& code,
+                                  xeus::execute_request_config config,
+                                  nl::json user_expressions) override;
+
+        /*nl::json execute_request_impl(int execution_counter,
                                       const std::string& code,
                                       bool silent,
                                       bool store_history,
                                       nl::json user_expressions,
-                                      bool allow_stdin) override;
+                                      bool allow_stdin) override;*/
 
         nl::json complete_request_impl(const std::string& code, int cursor_pos) override;
 
@@ -60,6 +68,9 @@ namespace xeus_pywrap
         nl::json kernel_info_request_impl() override;
 
         void shutdown_request_impl() override;
+
+        void set_request_context(xeus::xrequest_context context) override;
+        const xeus::xrequest_context& get_request_context() const noexcept override;
 
         py::object m_py_interpreter;
 

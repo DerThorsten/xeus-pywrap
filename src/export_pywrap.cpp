@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11_json/pybind11_json.hpp>
-#include <xeus-pywrap/xinterpreter.hpp>
+#include "xeus-pywrap/xinterpreter.hpp"
 
 #ifndef __EMSCRIPTEN__
 #include "xeus-pywrap/xaserver_zmq.hpp"
@@ -10,10 +10,6 @@
 namespace py = pybind11;
 
 namespace xeus_pywrap
-
-    
-
-
 {
     void export_interpreter(py::module& m)
     {
