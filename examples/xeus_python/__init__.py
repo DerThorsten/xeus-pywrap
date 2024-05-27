@@ -59,25 +59,25 @@ class Interpreter(xpywrap.InterpreterBase):
         
         async def task():
             # async with self.cell_lock:
-                try:
-                    ret = await exec_with_return(code, globals(), locals())
-                except Exception as e:
+            try:
+                ret = await exec_with_return(code, globals(), locals())
+            except Exception as e:
 
-                    # convert traceback to a list of strings
-                    tb = traceback.format_exception(type(e), e, e.__traceback__)
+                # convert traceback to a list of strings
+                tb = traceback.format_exception(type(e), e, e.__traceback__)
 
-                    __builtin__.print("rb",tb)
+                __builtin__.print("rb",tb)
 
-                    self.publish_execution_error(
-                        ename=type(e).__name__,
-                        evalue=str(e),
-                        trace_back=[],
-                    )
-                    return
-                result_data =  {"text/plain": ""}
-                if ret is not None:
-                    result_data =  {"text/plain": repr(ret)}
-                self.publish_execution_result(execution_count, result_data)
+                self.publish_execution_error(
+                    ename=type(e).__name__,
+                    evalue=str(e),
+                    trace_back=[],
+                )
+                return
+            result_data =  {"text/plain": ""}
+            if ret is not None:
+                result_data =  {"text/plain": repr(ret)}
+            self.publish_execution_result(execution_count, result_data)
 
         if xeus_pywrap_python_config["use_cell_lock"]:
             async def wrapped_task():
@@ -85,6 +85,7 @@ class Interpreter(xpywrap.InterpreterBase):
                     await task()
         else:
             wrapped_task = task
+
         asyncio.create_task(wrapped_task())
 
 

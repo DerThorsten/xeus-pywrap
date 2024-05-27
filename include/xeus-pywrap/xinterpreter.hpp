@@ -33,6 +33,13 @@ namespace xeus_pywrap
 {
     void export_pywrap(py::module& m);
 
+    // 
+    struct send_reply_callback_wrapper
+    { 
+        using send_reply_callback = std::function<void(nl::json)>;
+        send_reply_callback m_callback;
+    };
+
     class XEUS_PYWRAP_API interpreter : public xeus::xinterpreter
     {
     public:

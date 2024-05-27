@@ -101,8 +101,12 @@ def get_request_context():
     {
         try
         {
+
+            send_reply_callback_wrapper wrapper;
+            wrapper.m_callback = cb;
+
             m_py_interpreter.attr("_execute_request")(
-                cb,
+                wrapper,
                 execution_count, 
                 code,
                 config.silent,

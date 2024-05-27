@@ -11,8 +11,24 @@ namespace py = pybind11;
 
 namespace xeus_pywrap
 {
+
+    
     void export_interpreter(py::module& m)
     {
+
+        // send reply callback wrapper
+        py::class_<send_reply_callback_wrapper>(m, "send_reply_callback_wrapper")
+            .def("__call__", [](send_reply_callback_wrapper& self, const nl::json& reply) { self.m_callback(reply); })
+        ;
+
+        // request config
+        py::class_<xeus::execute_request_config>(m, "execute_request_config")
+            .def(py::init<>())
+            .def_readwrite("silent", &xeus::execute_request_config::silent)
+            .def_readwrite("store_history", &xeus::execute_request_config::store_history)
+            .def_readwrite("allow_stdin", &xeus::execute_request_config::allow_stdin)
+        ;
+
         // raw cpp interpreter
         py::class_<interpreter>(m, "_raw_interpreter")
             .def("publish_stream", &interpreter::publish_stream)
