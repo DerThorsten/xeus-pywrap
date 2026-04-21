@@ -52,11 +52,12 @@ jobs:
           echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
           emcmake cmake . \
+            -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ON \
+            -DCMAKE_FIND_ROOT_PATH=$PREFIX \
             -DCMAKE_SYSTEM_PREFIX_PATH=$PREFIX \
             -DCMAKE_PREFIX_PATH=$PREFIX \
             -DCMAKE_INSTALL_PREFIX=$PREFIX \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ON \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -Dxeus_DIR=$PREFIX/lib/cmake/xeus
 
