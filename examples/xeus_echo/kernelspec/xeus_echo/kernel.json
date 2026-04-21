@@ -1,7 +1,7 @@
 {
   "display_name": "xeus-echo",
   "argv": [
-      "/Users/thorstenbeier/micromamba/envs/xeus-pywrap/bin/xpywrap",
+      "/Users/thorstenbeier/micromamba/envs/xeus-pywrap-wasm-host/bin/xpywrap",
       "--module",
       "xeus_echo",
       "--factory",

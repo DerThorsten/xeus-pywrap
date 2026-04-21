@@ -423,7 +423,7 @@ foreach (name ${EXAMPLE_KERNELS})
     
 
     # install module into python site-packages
-    install(DIRECTORY ${EXAMPLE_PATH}/module/ DESTINATION ${XEUS_PYWRAP_PYTHON_SITEARCH})
+    install(DIRECTORY ${EXAMPLE_PATH}/module/${name} DESTINATION ${XEUS_PYWRAP_PYTHON_SITEARCH})
 
 endforeach ()
 
