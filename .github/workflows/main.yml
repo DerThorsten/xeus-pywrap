@@ -67,7 +67,7 @@ jobs:
 
 
       - name: Test xeus-python Python
-        run: pytest . -vvv
+        run: pytest test -vvv
 
   test-win:
 
@@ -125,4 +125,4 @@ jobs:
 
       - name: Test xeus-python Python
         shell: cmd /C call {0}
-        run: pytest . -vvv
+        run: pytest test -vvv
