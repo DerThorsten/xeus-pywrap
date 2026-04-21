@@ -97,6 +97,8 @@ if(EMSCRIPTEN)
 
 
     configure_file( post.js.in  ${CMAKE_CURRENT_BINARY_DIR}/post.js COPYONLY)
+else()
+    find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 
 # Flags
@@ -276,7 +278,10 @@ if (XEUS_PYWRAP_BUILD_SHARED)
     # Build libraries
     xeus_pywrap_create_target(xeus-pywrap SHARED xeus-pywrap)
     list(APPEND XEUS_PYWRAP_TARGETS xeus-pywrap)
-    target_link_libraries(xeus-pywrap PRIVATE xeus-zmq)
+    target_link_libraries(xeus-pywrap PRIVATE  pybind11::pybind11)
+
+    
+
 endif ()
 
 if (XEUS_PYWRAP_BUILD_STATIC)
