@@ -32,12 +32,12 @@ jobs:
         with:
           environment-file: environment-wasm-build.yml
           init-shell: bash
-          environment-name: xeus-python-wasm-build
+          environment-name: xeus-pywrap-wasm-build
 
       - name: Set ncpus
         run: echo "ncpus=$(nproc --all)" >> $GITHUB_ENV
 
-      - name: Build xeus-python
+      - name: Build xeus-pywrap
         shell: bash -l {0}
         run: |
           micromamba create \
@@ -48,7 +48,7 @@ jobs:
           set -eux
 
 
-          export PREFIX=$MAMBA_ROOT_PREFIX/envs/xeus-python-wasm-host
+          export PREFIX=$MAMBA_ROOT_PREFIX/envs/xeus-pywrap-wasm-host
           echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
           emcmake cmake . \
@@ -58,9 +58,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=$PREFIX \
             -DCMAKE_INSTALL_PREFIX=$PREFIX \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -Dxeus_DIR=$PREFIX/lib/cmake/xeus \
-            -Dpybind11_DIR=$PREFIX/share/cmake/pybind11
+            -DCMAKE_VERBOSE_MAKEFILE=ON 
 
           emmake make -j${{ env.ncpus }} install
 

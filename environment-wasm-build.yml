@@ -1,4 +1,4 @@
-name: xeus-python-wasm-build
+name: xeus-pywrap-wasm-build
 channels:
   - https://prefix.dev/emscripten-forge-4x
   - conda-forge
@@ -15,5 +15,3 @@ dependencies:
   - jupyterlite-xeus>=4.5.2
   - # widgets
   - ipywidgets
-  # example kernels additional dependencies
-  - tatsu
