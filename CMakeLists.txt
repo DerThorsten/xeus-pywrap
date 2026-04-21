@@ -87,8 +87,15 @@ endfunction()
 if(EMSCRIPTEN)
     find_package(xeus-lite REQUIRED)
     find_package(pyjs ${pyjs_REQUIRED_VERSION} REQUIRED)
+
+    file(WRITE post.js.in "")
+    cat(wasm_patches/post.js  post.js.in)
+
     configure_file(${pyjs_PRE_JS_PATH} ${CMAKE_CURRENT_BINARY_DIR}/pre.js COPYONLY)
     cat(${pyjs_POST_JS_PATH}  post.js.in)
+    configure_file( post.js.in  ${CMAKE_CURRENT_BINARY_DIR}/post.js COPYONLY)
+
+
     configure_file( post.js.in  ${CMAKE_CURRENT_BINARY_DIR}/post.js COPYONLY)
 endif()
 
@@ -318,6 +325,7 @@ if(EMSCRIPTEN)
     xeus_wasm_link_options(xpywrap "web,worker")
     target_link_options(xpywrap
         PUBLIC "SHELL: -s LZ4=1"
+        PUBLIC "SHELL: --pre-js  ${CMAKE_CURRENT_BINARY_DIR}/pre.js"
         PUBLIC "SHELL: --post-js  ${CMAKE_CURRENT_BINARY_DIR}/post.js"
         PUBLIC "-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=\"['\$Browser', '\$ERRNO_CODES']\" "
     )
