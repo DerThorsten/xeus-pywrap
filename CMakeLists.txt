@@ -75,8 +75,8 @@ set(pyjs_REQUIRED_VERSION 4.0.0)
 
 
 
-find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
-find_package(pybind11_json ${pybind11_json_REQUIRED_VERSION} REQUIRED)
+find_package(pybind11 REQUIRED)
+find_package(pybind11_json  REQUIRED)
 
 
 function(cat IN_FILE OUT_FILE)
@@ -278,7 +278,6 @@ if (XEUS_PYWRAP_BUILD_SHARED)
     # Build libraries
     xeus_pywrap_create_target(xeus-pywrap SHARED xeus-pywrap)
     list(APPEND XEUS_PYWRAP_TARGETS xeus-pywrap)
-    target_link_libraries(xeus-pywrap PRIVATE  pybind11::pybind11)
 
     
 
