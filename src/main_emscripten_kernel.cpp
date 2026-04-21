@@ -27,11 +27,55 @@ namespace xeus_pywrap
     void export_pywrap(py::module& m);
 }
 
+
+std::string extract_parameter(std::string param, std::vector<std::string> argv, bool mandatory)
+{
+    std::string res = "";
+    for (int i = 0; i < argv.size(); ++i)
+    {
+        if ((std::string(argv[i]) == param) && (i + 1 < argv.size()))
+        {
+            res = argv[i + 1];
+            return res;
+        }
+    }
+    if(mandatory)
+    {
+        throw std::runtime_error("No parameter provided for " + param);
+    }
+    return res;
+}
+
+
+
+template <class interpreter_type>
+static interpreter_type* builder_with_args(emscripten::val js_args)
+{
+
+    std::vector<std::string> args = emscripten::vecFromJSArray<std::string>(js_args);
+
+    std::string module_name = extract_parameter("--module", args, true /*mandatory*/);
+    std::string factory_name = extract_parameter("--factory", args, true /*mandatory*/);
+    std::string connection_filename = extract_parameter("--connection", args, false /*mandatory*/);
+
+    auto globals = py::globals();
+    
+    nl::json interpreter_config = {
+        {"py_module", module_name},
+        {"py_factory", factory_name},
+        {"py_args", args}
+    };
+
+    auto* res = new interpreter_type(globals, std::move(interpreter_config));
+    return res;
+}
+
+
 EMSCRIPTEN_BINDINGS(my_module) {
     pyjs::export_js_module();
     xeus::export_core();
     using interpreter_type = xeus_pywrap::interpreter;
-    xeus::export_kernel<interpreter_type>("xkernel");
+    xeus::export_kernel<interpreter_type, &builder_with_args<interpreter_type>>("xkernel");
 }
 
 PYBIND11_EMBEDDED_MODULE(_xpywrap, m) {
