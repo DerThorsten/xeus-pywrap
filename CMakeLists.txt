@@ -394,7 +394,7 @@ foreach (name ${EXAMPLE_KERNELS})
     # Extra path for installing Jupyter kernelspec
     if (XEXTRA_JUPYTER_DATA_DIR)
         install(DIRECTORY ${EXAMPLE_KERNELSPEC_DIR}
-                DESTINATION ${XEXTRA_JUPYTER_DATA_DIR}
+                DESTINATION ${XEXTRA_JUPYTER_DATA_DIR}/kernels
                 PATTERN "*.in" EXCLUDE)
     endif ()
 
