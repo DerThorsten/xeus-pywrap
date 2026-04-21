@@ -270,6 +270,20 @@ macro(xeus_pywrap_create_target target_name linkage output_name)
     
 endmacro()
 
+# 
+# get the python side path
+############################
+# check for XEUS_PYWRAP_PYTHON_SITEARCH, if not set, use the default from the python module
+if(NOT DEFINED XEUS_PYWRAP_PYTHON_SITEARCH)
+    execute_process(
+        COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+        OUTPUT_VARIABLE XEUS_PYWRAP_PYTHON_SITEARCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+endif()
+message(STATUS "Python site-packages directory: ${XEUS_PYWRAP_PYTHON_SITEARCH}")    
+
+
 # xeus-pywrap
 # ===========
 
@@ -373,7 +387,7 @@ endif()
 set(XJUPYTER_DATA_DIR "share/jupyter"    CACHE STRING "Jupyter data directory")
 
 # install module into python site-packages
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${Python_SITEARCH}/)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${XEUS_PYWRAP_PYTHON_SITEARCH})
 
 # cmake list of example kernels: atm only xeus_echo
 SET(EXAMPLE_KERNELS 
@@ -409,7 +423,7 @@ foreach (name ${EXAMPLE_KERNELS})
     
 
     # install module into python site-packages
-    install(DIRECTORY ${EXAMPLE_PATH}/module/ DESTINATION ${Python_SITEARCH})
+    install(DIRECTORY ${EXAMPLE_PATH}/module/ DESTINATION ${XEUS_PYWRAP_PYTHON_SITEARCH})
 
 endforeach ()
 
@@ -452,3 +466,4 @@ if(EMSCRIPTEN)
 endif ()
 
 # install pure python part
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${XEUS_PYWRAP_PYTHON_SITEARCH})

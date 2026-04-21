@@ -58,7 +58,8 @@ jobs:
             -DCMAKE_PREFIX_PATH=$PREFIX \
             -DCMAKE_INSTALL_PREFIX=$PREFIX \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_VERBOSE_MAKEFILE=ON 
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DXEUS_PYWRAP_PYTHON_SITEARCH=$PREFIX/lib/python3.13/site-packages/ 
 
           emmake make -j${{ env.ncpus }} install
 
