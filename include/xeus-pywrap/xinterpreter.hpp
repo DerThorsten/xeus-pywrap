@@ -31,7 +31,7 @@ namespace py = pybind11;
 
 namespace xeus_pywrap
 {
-    void export_pywrap(py::module& m);
+    XEUS_PYWRAP_API XEUS_PYWRAP_FORCE_PYBIND11_EXPORT void export_pywrap(py::module& m);
 
     // 
     struct send_reply_callback_wrapper

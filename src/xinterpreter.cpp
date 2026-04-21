@@ -177,7 +177,7 @@ def get_request_context():
          
     }
 
-    nl::json  interpreter::shutdown_request_impl(bool restart) {
+    nl::json  interpreter::shutdown_request_impl(bool /*restart*/) {
         std::cout<<"shotdown pls"<<std::endl;
         // try{
         //     m_py_interpreter.attr("_shutdown_request")();
