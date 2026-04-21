@@ -52,6 +52,7 @@ OPTION(XEUS_PYWRAP_USE_SHARED_XEUS_PYWRAP "Link xpywrap  with the xeus shared li
 
 
 if(EMSCRIPTEN)
+    set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
     add_compile_definitions(XEUS_PYWRAP_EMSCRIPTEN_WASM_BUILD)
     message("Build with emscripten")
     SET(XEUS_PYWRAP_BUILD_STATIC ON)
