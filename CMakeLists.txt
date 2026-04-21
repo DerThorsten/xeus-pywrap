@@ -311,10 +311,14 @@ endif()
 
 if(EMSCRIPTEN)
     SET(PYTHON_UTIL_LIBS
-        $ENV{PREFIX}/lib/libbz2.a
-        $ENV{PREFIX}/lib/libz.a
-        $ENV{PREFIX}/lib/libsqlite3.a
-        $ENV{PREFIX}/lib/libffi.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libbz2.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libz.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libsqlite3.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libffi.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libzstd.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libssl.a
+        ${CMAKE_INSTALL_PREFIX}/lib/libcrypto.a
+        ${CMAKE_INSTALL_PREFIX}/lib/liblzma.a
     )
     find_package(zlib REQUIRED)
 
