@@ -31,7 +31,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     pyjs::export_js_module();
     xeus::export_core();
     using interpreter_type = xeus_pywrap::interpreter;
-    xeus::export_parametrizable_kernel<interpreter_type>("xkernel");
+    xeus::export_kernel<interpreter_type>("xkernel");
 }
 
 PYBIND11_EMBEDDED_MODULE(_xpywrap, m) {
