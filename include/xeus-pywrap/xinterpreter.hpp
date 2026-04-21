@@ -44,7 +44,7 @@ namespace xeus_pywrap
     {
     public:
 
-        interpreter(nl::json && parameters);
+        interpreter(py::dict globals, nl::json && parameters);
         virtual ~interpreter() = default;
 
     protected:
@@ -74,11 +74,14 @@ namespace xeus_pywrap
 
         nl::json kernel_info_request_impl() override;
 
-        void shutdown_request_impl() override;
+        nl::json interrupt_request_impl() override;
+
+        nl::json shutdown_request_impl(bool restart) override;
 
         void set_request_context(xeus::xrequest_context context) override;
         const xeus::xrequest_context& get_request_context() const noexcept override;
 
+        py::dict m_globals;
         py::object m_py_interpreter;
 
         // we cache the kernel info, since the kernel info request

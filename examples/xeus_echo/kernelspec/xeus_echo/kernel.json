@@ -1,0 +1,15 @@
+{
+  "display_name": "xeus-echo",
+  "argv": [
+      "/Users/thorstenbeier/micromamba/envs/xeus-pywrap/bin/xpywrap",
+      "--module",
+      "xeus_echo",
+      "--factory",
+      "make_interpreter",
+      "--connection",
+      "{connection_file}"
+  ],
+  "language": "echo",
+  "metadata": {"debugger": false
+  }
+}

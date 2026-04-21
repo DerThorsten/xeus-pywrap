@@ -65,7 +65,13 @@ def get_request_context():
         return rc_module;
     }
 
-    interpreter::interpreter(nl::json && parameters)
+    interpreter::interpreter(
+        py::dict globals,
+        nl::json && parameters
+    )
+    :   m_globals(globals),
+        m_py_interpreter(py::none()),
+        m_kernel_info_reply()
     {
         get_request_context_module();
 
@@ -171,7 +177,7 @@ def get_request_context():
          
     }
 
-    void interpreter::shutdown_request_impl() {
+    nl::json  interpreter::shutdown_request_impl(bool restart) {
         std::cout<<"shotdown pls"<<std::endl;
         // try{
         //     m_py_interpreter.attr("_shutdown_request")();
@@ -180,6 +186,14 @@ def get_request_context():
         //     const auto error_message = e.what();
         //     publish_execution_error("Excetpion",  error_message, {});
         // }
+        
+        return xeus::create_shutdown_reply(false);
+        
+    }
+
+    nl::json interpreter::interrupt_request_impl()
+    {
+        return xeus::create_interrupt_reply();      
     }
 
     nl::json interpreter::kernel_info_request_impl()

@@ -31,7 +31,7 @@
 
 #include "xeus-pywrap/xinterpreter.hpp"
 #include "xeus-pywrap/xeus_pywrap_config.hpp"
-#include "xeus-pywrap/xaserver_zmq.hpp"
+#include "xeus-pywrap/xaserver.hpp"
 
 #include <pybind11/embed.h>
 
@@ -118,6 +118,11 @@ std::string extract_parameter(std::string param, int argc, char* argv[], bool ma
 
 int main(int argc, char* argv[])
 {
+
+    // create pybind11 interpreter:
+
+    py::scoped_interpreter guard{};
+
     if (should_print_version(argc, argv))
     {
         std::clog << "xpywrap " << XEUS_PYWRAP_VERSION  << std::endl;
@@ -142,6 +147,9 @@ int main(int argc, char* argv[])
 
     auto context = xeus::make_zmq_context();
 
+    // we want to use **the same global dict everywhere**
+    py::dict globals = py::globals();    
+
     // Instantiating the xeus xinterpreter
     using interpreter_ptr = std::unique_ptr<xeus_pywrap::interpreter>;
 
@@ -163,8 +171,12 @@ int main(int argc, char* argv[])
         {"py_args", args}
     };
 
-    py::scoped_interpreter guard{}; // start the interpreter and keep it alive
-    interpreter_ptr interpreter = interpreter_ptr(new xeus_pywrap::interpreter(std::move(interpreter_config)));
+    std::cout<<"config: "<<interpreter_config.dump(4)<<std::endl;
+
+
+    interpreter_ptr interpreter = interpreter_ptr(
+        new xeus_pywrap::interpreter(globals, std::move(interpreter_config))
+    );
 
 
     std::cout<<"the conection filename is: "<<connection_filename<<std::endl;
@@ -180,7 +192,8 @@ int main(int argc, char* argv[])
                                        xeus::get_user_name(),
                                        std::move(context),
                                        std::move(interpreter),
-                                       xeus_pywrap::make_xaserver_zmq));
+                                       xeus_pywrap::make_async_server_factory(globals)
+                                       ));
 
         std::cout <<
             "Starting xpywrap kernel...\n\n"
@@ -197,7 +210,7 @@ int main(int argc, char* argv[])
         kernel.reset(new xeus::xkernel(xeus::get_user_name(),
                              std::move(context),
                              std::move(interpreter),
-                             xeus_pywrap::make_xaserver_zmq));
+                             xeus_pywrap::make_async_server_factory(globals)));
 
         const auto& config = kernel->get_config();
 
@@ -227,30 +240,6 @@ int main(int argc, char* argv[])
     }
     std::cout<<"lift-off"<<std::endl;
     kernel->start();
-
-    auto & server = kernel->get_server();
-
-    // get the python object
-    auto py_server = py::cast(server, py::return_value_policy::reference);
-
-
-    // import xpywrap
-    auto xpywrap_module = py::module_::import("xpywrap");
-
-
-    std::cout<<"kernel started"<<std::endl;
-    std::cout << "custom event loop" << std::endl;
-
-    auto runner = xpywrap_module.attr("runner");
-
-    std::cout<<"run the runner"<<std::endl;
-    try{
-        runner(py_server);
-    }
-    catch(std::exception & e){
-        std::cout<<"caught"<<e.what()<<std::endl;
-    }
-
 
 
     return 0;

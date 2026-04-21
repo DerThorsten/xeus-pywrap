@@ -1,0 +1,14 @@
+{
+  "display_name": "xeus-shakespearelang",
+  "argv": [
+      "@XEUS_PYWRAP_KERNELSPEC_PATH@xpywrap",
+      "--module",
+      "xeus_shakespearelang",
+      "--factory",
+      "make_interpreter",
+      "--connection",
+      "{connection_file}"
+  ],
+  "language": "Shakespearelang",
+  "metadata": {"debugger": false}
+}

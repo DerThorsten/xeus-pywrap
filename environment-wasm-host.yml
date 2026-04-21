@@ -5,5 +5,7 @@ channels:
 dependencies:
   - nlohmann_json
   - xeus-lite
-  - xeus >=3.0.5,<4.0
-  - xtl >=0.7,<0.8
+  - xeus>=6.0.5
+  - pyjs >=4,<5
+  # example kernels additional dependencies
+  - tatsu

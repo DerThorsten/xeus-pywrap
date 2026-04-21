@@ -2,16 +2,20 @@
 #include <pybind11/stl.h>
 #include <pybind11_json/pybind11_json.hpp>
 #include "xeus-pywrap/xinterpreter.hpp"
-
-#ifndef __EMSCRIPTEN__
-#include "xeus-pywrap/xaserver_zmq.hpp"
-#endif 
+#include "xeus/xinput.hpp"
 
 namespace py = pybind11;
 
 namespace xeus_pywrap
 {
 
+    void export_free_functions(py::module& m)
+    {
+       // return xeus::blocking_input_request(prompt, false);
+       m.def("blocking_input_request", [](const std::string& prompt, bool password) {
+            return xeus::blocking_input_request(prompt, password);
+        }, py::arg("prompt"), py::arg("password") = false);
+    }
     
     void export_interpreter(py::module& m)
     {
@@ -42,23 +46,10 @@ namespace xeus_pywrap
         ;
     }
 
-    #ifndef __EMSCRIPTEN__
-    void export_server(py::module& m)
-    {
-        py::class_<xaserver_zmq>(m, "_xaserver_zmq")
-            .def("poll", &xaserver_zmq::poll)
-            .def("stopped", &xaserver_zmq::stopped);
-        ;
-    }
-    #endif
-
 
     void export_pywrap(py::module& m)
     {
-        #ifndef __EMSCRIPTEN__
-        export_server(m);
-        #endif
-
         export_interpreter(m);
+        export_free_functions(m);
     }
 }

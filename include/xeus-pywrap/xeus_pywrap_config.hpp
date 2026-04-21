@@ -34,4 +34,20 @@
     #define XEUS_PYWRAP_API
 #endif
 
+#ifdef _MSC_VER
+    #define XEUS_PYWRAP_FORCE_PYBIND11_EXPORT
+#else
+    #define XEUS_PYWRAP_FORCE_PYBIND11_EXPORT __attribute__ ((visibility ("default")))
 #endif
+
+#ifdef _MSC_VER
+    #define XEUS_PYWRAP_HIDDEN
+#else
+    #define XEUS_PYWRAP_HIDDEN __attribute__ ((visibility ("hidden")))
+#endif
+
+
+
+#endif // XEUS_PYWRAP_CONFIG_HPP
+
+

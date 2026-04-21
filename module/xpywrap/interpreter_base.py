@@ -4,13 +4,21 @@ from contextlib import redirect_stdout, contextmanager
 
 
 
+interpreter = None
 
 
+def get_interpreter():
+    global interpreter
+    if interpreter is None:
+        raise RuntimeError("Interpreter not initialized yet.")
+    return interpreter
 
 class InterpreterBase(ABC):
 
     def __init__(self):
+        global interpreter
         self._interpreter_impl = None
+        interpreter = self
     
     def _set_interpreter_impl(self, interpreter_impl):
         self._interpreter_impl = interpreter_impl

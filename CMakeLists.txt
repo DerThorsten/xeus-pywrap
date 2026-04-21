@@ -6,7 +6,7 @@
 #The full license is in the file LICENSE, distributed with this software.
 #############################################################################
 
-cmake_minimum_required(VERSION 3.4.3)
+cmake_minimum_required(VERSION 4.0)
 project(xeus-pywrap)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
@@ -67,14 +67,14 @@ endif()
 # ============
 
 set(xtl_REQUIRED_VERSION 0.7.0)
-set(xeus_REQUIRED_VERSION 4)
+set(xeus_REQUIRED_VERSION 6)
 
 
 find_package(xtl ${xtl_REQUIRED_VERSION} REQUIRED)
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
 find_package(pybind11_json ${pybind11_json_REQUIRED_VERSION} REQUIRED)
-find_package(PythonInterp ${PythonLibsNew_FIND_VERSION} REQUIRED)
+
 
 function(cat IN_FILE OUT_FILE)
   file(READ ${IN_FILE} CONTENTS)
@@ -124,16 +124,18 @@ endif()
 set(XEUS_PYWRAP_HEADERS
     include/xeus-pywrap/xeus_pywrap_config.hpp
     include/xeus-pywrap/xinterpreter.hpp
+    include/xeus-pywrap/xaserver.hpp
 )
 
 set(XEUS_PYWRAP_SRC
     src/xinterpreter.cpp
     src/export_pywrap.cpp
-)
-
-if(NOT EMSCRIPTEN)
+    )
+    
+    if(NOT EMSCRIPTEN)
     list(APPEND XEUS_PYWRAP_SRC
-        src/xaserver_zmq.cpp
+        src/xaserver.cpp
+        src/xasync_runner.cpp
     )
 endif()
 
@@ -347,24 +349,53 @@ if (XEUS_PYWRAP_BUILD_EXECUTABLE)
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
-if (XEUS_PYWRAP_BUILD_EXECUTABLE OR EMSCRIPTEN)
-    # Configuration and data directories for jupyter and xeus-pywrap
-    set(XJUPYTER_DATA_DIR "share/jupyter"    CACHE STRING "Jupyter data directory")
 
-    # Install xpywrap Jupyter kernelspec
-    set(KERNELSPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/share/jupyter/kernels)
-    install(DIRECTORY ${KERNELSPEC_DIR}
-            DESTINATION ${XJUPYTER_DATA_DIR}
+# Configuration and data directories for jupyter and xeus-pywrap
+set(XJUPYTER_DATA_DIR "share/jupyter"    CACHE STRING "Jupyter data directory")
+set(KERNELSPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/share/jupyter/kernels)
+
+
+# install module into python site-packages
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${Python_SITEARCH}/)
+
+# cmake list of example kernels: atm only xeus_echo
+SET(EXAMPLE_KERNELS 
+"xeus_echo" 
+"xeus_shakespearelang"
+)
+
+# iterate over example kernels and install them
+foreach (name ${EXAMPLE_KERNELS})
+
+    message(STATUS "Installing example kernel: ${name}")
+
+    SET(EXAMPLE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/examples/${name}")
+    SET(EXAMPLE_KERNELSPEC_DIR "${EXAMPLE_PATH}/kernelspec/${name}")
+
+    # kernel.json from kernel.json.in (without caching)
+    configure_file ( "${EXAMPLE_KERNELSPEC_DIR}/kernel.json.in"  "${EXAMPLE_KERNELSPEC_DIR}/kernel.json"
+                    @ONLY
+                    )
+
+    # install the kernel spec
+    install(DIRECTORY ${EXAMPLE_KERNELSPEC_DIR}
+            DESTINATION ${XJUPYTER_DATA_DIR}/kernels
             PATTERN "*.in" EXCLUDE)
-
-
+        
     # Extra path for installing Jupyter kernelspec
     if (XEXTRA_JUPYTER_DATA_DIR)
         install(DIRECTORY ${KERNELSPEC_DIR}
                 DESTINATION ${XEXTRA_JUPYTER_DATA_DIR}
                 PATTERN "*.in" EXCLUDE)
     endif ()
-endif ()
+
+    
+
+    # install module into python site-packages
+    install(DIRECTORY ${EXAMPLE_PATH}/module/ DESTINATION ${Python_SITEARCH})
+
+endforeach ()
+
 
 # Configure 'xeus-pywrapConfig.cmake' for a build tree
 set(XEUS_PYWRAP_CONFIG_CODE "####### Expanded from \@XEUS_PYWRAP_CONFIG_CODE\@ #######\n")
