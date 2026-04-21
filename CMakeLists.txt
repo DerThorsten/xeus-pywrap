@@ -66,12 +66,15 @@ endif()
 # Dependencies
 # ============
 
-set(xtl_REQUIRED_VERSION 0.7.0)
-set(xeus_REQUIRED_VERSION 6)
+set(xeus_zmq_REQUIRED_VERSION 4.0.0)
+set(xeus-lite_REQUIRED_VERSION 5.0.0)
+set(pybind11_REQUIRED_VERSION 2.6.1)
+set(pybind11_json_REQUIRED_VERSION 0.2.8)
+set(pyjs_REQUIRED_VERSION 4.0.0)
 
 
 
-find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
+
 find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
 find_package(pybind11_json ${pybind11_json_REQUIRED_VERSION} REQUIRED)
 
@@ -287,7 +290,7 @@ endif ()
 # xpywrap
 # =======
 if (XEUS_PYWRAP_BUILD_EXECUTABLE)
-    find_package(xeus-zmq 1.0.2 REQUIRED)
+    find_package(xeus-zmq ${xeus-zmq_REQUIRED_VERSION} REQUIRED)
     add_executable(xpywrap ${XEUS_PYWRAP_MAIN_SRC})
     target_compile_features(xpywrap PRIVATE cxx_std_17)
     xeus_pywrap_set_common_options(xpywrap)
