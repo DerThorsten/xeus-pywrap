@@ -296,7 +296,6 @@ if (XEUS_PYWRAP_BUILD_STATIC)
         target_compile_options(xeus-pywrap-static PRIVATE -fPIC)
     endif()
     list(APPEND XEUS_PYWRAP_TARGETS xeus-pywrap-static)
-    target_link_libraries(xeus-pywrap-static PRIVATE xeus-zmq)
 endif ()
 
 # xpywrap
