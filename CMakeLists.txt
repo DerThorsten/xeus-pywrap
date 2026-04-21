@@ -363,8 +363,6 @@ endif()
 
 # Configuration and data directories for jupyter and xeus-pywrap
 set(XJUPYTER_DATA_DIR "share/jupyter"    CACHE STRING "Jupyter data directory")
-set(KERNELSPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/share/jupyter/kernels)
-
 
 # install module into python site-packages
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${Python_SITEARCH}/)
@@ -395,7 +393,7 @@ foreach (name ${EXAMPLE_KERNELS})
         
     # Extra path for installing Jupyter kernelspec
     if (XEXTRA_JUPYTER_DATA_DIR)
-        install(DIRECTORY ${KERNELSPEC_DIR}
+        install(DIRECTORY ${EXAMPLE_KERNELSPEC_DIR}
                 DESTINATION ${XEXTRA_JUPYTER_DATA_DIR}
                 PATTERN "*.in" EXCLUDE)
     endif ()
