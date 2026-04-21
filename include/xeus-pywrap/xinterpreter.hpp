@@ -40,7 +40,7 @@ namespace xeus_pywrap
         send_reply_callback m_callback;
     };
 
-    class XEUS_PYWRAP_API interpreter : public xeus::xinterpreter
+    class XEUS_PYWRAP_API XEUS_PYWRAP_FORCE_PYBIND11_EXPORT interpreter : public xeus::xinterpreter
     {
     public:
 
