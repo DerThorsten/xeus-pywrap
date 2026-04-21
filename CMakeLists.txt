@@ -70,7 +70,7 @@ set(xtl_REQUIRED_VERSION 0.7.0)
 set(xeus_REQUIRED_VERSION 6)
 
 
-find_package(xtl ${xtl_REQUIRED_VERSION} REQUIRED)
+
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
 find_package(pybind11_json ${pybind11_json_REQUIRED_VERSION} REQUIRED)
@@ -243,7 +243,7 @@ macro(xeus_pywrap_create_target target_name linkage output_name)
     endif ()
 
     target_link_libraries(${target_name} PUBLIC ${XEUS_PYWRAP_XEUS_TARGET} 
-        xtl pybind11::pybind11 pybind11_json
+        pybind11::pybind11 pybind11_json
     )
     if (WIN32 OR CYGWIN)
         target_link_libraries(${target_name} PRIVATE ${PYTHON_LIBRARIES})
