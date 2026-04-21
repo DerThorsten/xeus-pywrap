@@ -58,6 +58,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ON \
             -DCMAKE_VERBOSE_MAKEFILE=ON
+            -Dxeus_DIR=$PREFIX/lib/cmake/xeus
 
           emmake make -j${{ env.ncpus }} install
 
