@@ -69,9 +69,9 @@ jobs:
           jupyter lite build \
               --XeusAddon.prefix=${{ env.PREFIX }} \
               --contents notebooks/ \
-              --output-dir dist 
-              --mount ${{ env.PREFIX }}/lib/python3.13/site-packages/xeus_shakespearelang/:/lib/python3.13/site-packages/xeus_shakespearelang/
-              --mount ${{ env.PREFIX }}/lib/python3.13/site-packages/xeus_echo/:/lib/python3.13/site-packages/xeus_echo/
+              --output-dir dist \
+              --XeusAddon.mounts=${{ env.PREFIX }}/lib/python3.13/site-packages/xeus_shakespearelang/:/lib/python3.13/site-packages/xeus_shakespearelang/
+              --XeusAddon.mounts=${{ env.PREFIX }}/lib/python3.13/site-packages/xeus_echo/:/lib/python3.13/site-packages/xeus_echo/
 
 
       - name: Upload artifact
