@@ -59,7 +59,8 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=$PREFIX \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -Dxeus_DIR=$PREFIX/lib/cmake/xeus
+            -Dxeus_DIR=$PREFIX/lib/cmake/xeus \
+            -Dpybind11_DIR=$PREFIX/lib/python3.14/site-packages/pybind11/share/cmake/pybind11
 
           emmake make -j${{ env.ncpus }} install
 
