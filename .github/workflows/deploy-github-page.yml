@@ -76,7 +76,6 @@ jobs:
               --XeusAddon.default_channels=https://repo.prefix.dev/emscripten-forge-4x \
               --XeusAddon.default_channels=https://repo.prefix.dev/conda-forge \
               --XeusAddon.mounts=${{ env.PREFIX }}/lib/python3.13/site-packages/xeus_shakespearelang/:/lib/python3.13/site-packages/xeus_shakespearelang/ \
-              --XeusAddon.mounts=${{ env.PREFIX }}/lib/python3.13/site-packages/xeus_echo/:/lib/python3.13/site-packages/xeus_echo/ \
               --XeusAddon.mounts=${{ env.PREFIX }}/lib/python3.13/site-packages/xpywrap/:/lib/python3.13/site-packages/xpywrap/
 
       - name: Upload artifact
