@@ -56,25 +56,18 @@ static interpreter_type* builder_with_args(emscripten::val js_args)
     std::string factory_name = extract_parameter("--factory", args, true /*mandatory*/);
     std::string connection_filename = extract_parameter("--connection", args, false /*mandatory*/);
 
-    std::cout<<"module name: "<<module_name<<std::endl;
-    std::cout<<"factory name: "<<factory_name<<std::endl;
-    std::cout<<"create globals dict"<<std::endl;
+
 
     emscripten::val jprefix("/");
     emscripten::val jversion("3.13");
-    emscripten::val jdebug(true);
+    emscripten::val jverbose(true);
 
-    std::cout<<"get init_phase_1"<<std::endl;
+
     emscripten::val init_phase_1 =  emscripten::val ::module_property("pywrap_init_phase_1");
-    std::cout<<"call init_phase_1"<<std::endl;
-    init_phase_1(jprefix, jversion, jdebug);
+    init_phase_1(jprefix, jversion, jverbose);
 
-    std::cout<<"get init_phase_2"<<std::endl;
     emscripten::val init_phase_2 =  emscripten::val ::module_property("pywrap_init_phase_2");
-    std::cout<<"call init_phase_2"<<std::endl;
-    init_phase_2(jprefix, jversion, jdebug);
-
-
+    init_phase_2(jprefix, jversion, jverbose);
 
     auto globals = py::globals();
     
@@ -94,8 +87,6 @@ PYBIND11_EMBEDDED_MODULE(_xpywrap, m) {
 }
 
 PYBIND11_EMBEDDED_MODULE(pyjs_core, m) {
-
-    std::cout<<"exporting pyjs module"<<std::endl;
     pyjs::export_pyjs_module(m);
 }
 

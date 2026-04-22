@@ -73,11 +73,7 @@ def get_request_context():
         m_py_interpreter(py::none()),
         m_kernel_info_reply()
     {
-        std::cout<<"interpreter ctor"<<std::endl;
-
         get_request_context_module();
-
-        std::cout<<"module name: "<<parameters["py_module"].get<std::string>()<<std::endl;
 
         // get the name of the python module to load
         std::string module_name = parameters["py_module"].get<std::string>();

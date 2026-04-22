@@ -200,23 +200,13 @@ except Exception as e:
     raise e
     `)
 
-    if(verbose){console.log("assign pyobjects I");}
     Module.py_pyjs = Module.eval("pyjs")
     Module._py_objects.push(Module.py_pyjs);
 
 
     // execute a script and return the value of the last expression
     try {
-        if(verbose){console.log("assign pyobjects IIaa");}
-        Module.eval("print('jay')")
-        Module.exec(`
-print("check exec_eval")
-print(hasattr(pyjs, "exec_eval"))
-
-for name in dir(pyjs):
-    print(name, getattr(pyjs, name))
-        `)
-        if(verbose){console.log("assign pyobjects IIab");}
+        if(verbose){console.log("assign pyobjects IIa");}
         Module._py_exec_eval = Module.eval("pyjs.exec_eval")
     }   
     catch (e) {
@@ -228,10 +218,10 @@ for name in dir(pyjs):
 
 
 
-     if(verbose){console.log("assign pyobjects IIb");}
+    if(verbose){console.log("assign pyobjects IIb");}
     Module._py_objects.push(Module._py_exec_eval)
-     if(verbose){console.log("assign pyobjects IIc");}
-    Module.exec_eval = function(script, globals=default_scope, locals=default_scope){
+    if(verbose){console.log("assign pyobjects IIc");}
+        Module.exec_eval = function(script, globals=default_scope, locals=default_scope){
         return Module._py_exec_eval.py_call(script, globals, locals)
     }
     
