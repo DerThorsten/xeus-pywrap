@@ -345,12 +345,25 @@ if(EMSCRIPTEN)
     XEUS_PYWRAP_set_kernel_options(xpywrap)
     xeus_wasm_compile_options(xpywrap)
     xeus_wasm_link_options(xpywrap "web,worker")
+
+    set_target_properties(xpywrap PROPERTIES
+        LINK_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pre.js
+    )
+    set_target_properties(xpywrap PROPERTIES
+        LINK_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/post.js
+    )
+
+
+
+
     target_link_options(xpywrap
         PUBLIC "SHELL: -s LZ4=1"
         PUBLIC "SHELL: --pre-js  ${CMAKE_CURRENT_BINARY_DIR}/pre.js"
         PUBLIC "SHELL: --post-js  ${CMAKE_CURRENT_BINARY_DIR}/post.js"
         PUBLIC "-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=\"['\$Browser', '\$ERRNO_CODES']\" "
     )
+
+    
 endif()
 
 target_link_libraries(xpywrap PRIVATE pybind11::embed)

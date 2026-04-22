@@ -4,6 +4,6 @@ import _xpywrap #noqa
 
 import asyncio
 
-import nest_asyncio
+
 
 from _xpywrap import blocking_input_request
