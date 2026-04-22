@@ -73,10 +73,9 @@ set(pybind11_REQUIRED_VERSION 2.6.1)
 set(pybind11_json_REQUIRED_VERSION 0.2.8)
 set(pyjs_REQUIRED_VERSION 4.0.0)
 
-
-
-
-find_package(pybind11 REQUIRED)
+find_package(Python COMPONENTS Interpreter REQUIRED)
+ set(PYBIND11_FINDPYTHON OFF)
+find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
 find_package(pybind11_json  REQUIRED)
 
 

@@ -12,7 +12,7 @@
 // Project version
 #define XEUS_PYWRAP_VERSION_MAJOR 0
 #define XEUS_PYWRAP_VERSION_MINOR 1
-#define XEUS_PYWRAP_VERSION_PATCH 0
+#define XEUS_PYWRAP_VERSION_PATCH 1
 
 // Composing the version string from major, minor and patch
 #define XEUS_PYWRAP_CONCATENATE(A, B) XEUS_PYWRAP_CONCATENATE_IMPL(A, B)
