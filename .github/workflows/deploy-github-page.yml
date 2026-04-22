@@ -59,6 +59,8 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=$PREFIX \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DXEUS_PYWRAP_INSTALL_XEUS_ECHO_KERNEL=OFF \
+            -DXEUS_PYWRAP_INSTALL_XEUS_SHAKESPEARELANG_KERNEL=ON \
             -DXEUS_PYWRAP_PYTHON_SITEARCH=$PREFIX/lib/python3.13/site-packages/ 
 
           emmake make -j${{ env.ncpus }} install

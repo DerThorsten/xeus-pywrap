@@ -403,10 +403,18 @@ set(XJUPYTER_DATA_DIR "share/jupyter"    CACHE STRING "Jupyter data directory")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${XEUS_PYWRAP_PYTHON_SITEARCH})
 
 # cmake list of example kernels: atm only xeus_echo
-SET(EXAMPLE_KERNELS 
-"xeus_echo" 
-"xeus_shakespearelang"
-)
+option(XEUS_PYWRAP_INSTALL_XEUS_ECHO_KERNEL "Install xeus_echo example kernel" ON)
+option(XEUS_PYWRAP_INSTALL_XEUS_SHAKESPEARELANG_KERNEL "Install xeus_shakespearelang example kernel" ON)
+
+SET(EXAMPLE_KERNELS )
+
+if(XEUS_PYWRAP_INSTALL_XEUS_ECHO_KERNEL)
+    list(APPEND EXAMPLE_KERNELS xeus_echo)
+endif()
+
+if(XEUS_PYWRAP_INSTALL_XEUS_SHAKESPEARELANG_KERNEL)
+    list(APPEND EXAMPLE_KERNELS xeus_shakespearelang)
+endif()
 
 # iterate over example kernels and install them
 foreach (name ${EXAMPLE_KERNELS})
