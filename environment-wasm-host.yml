@@ -13,6 +13,6 @@ dependencies:
   - pyjs >=4,<5
   - libpython
   - zstd
-  - openssl
+  - openssl <4
   - xz
   - tatsu

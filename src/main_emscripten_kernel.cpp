@@ -31,7 +31,7 @@ namespace xeus_pywrap
 std::string extract_parameter(std::string param, std::vector<std::string> argv, bool mandatory)
 {
     std::string res = "";
-    for (int i = 0; i < argv.size(); ++i)
+    for (std::size_t i = 0; i < argv.size(); ++i)
     {
         if ((std::string(argv[i]) == param) && (i + 1 < argv.size()))
         {
