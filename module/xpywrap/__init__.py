@@ -1,4 +1,8 @@
-from .interpreter_base import InterpreterBase, get_interpreter
+from .interpreter_base import ( 
+    get_interpreter,
+    BlockingInterpreterBase,
+    AsyncInterpreterBase
+)
 from .response import * # noqa
 import _xpywrap #noqa
 
@@ -6,4 +10,4 @@ import asyncio
 
 
 
-from _xpywrap import blocking_input_request
+from _xpywrap import * #noqa

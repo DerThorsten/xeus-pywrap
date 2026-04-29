@@ -2,46 +2,26 @@ from abc import ABC, abstractmethod
 from contextlib import redirect_stdout, contextmanager
 
 
-
-
-interpreter = None
+# since there is only one interpreter per process, we can use a global variable to store the interpreter instance.
+_interpreter = None
 
 
 def get_interpreter():
-    global interpreter
-    if interpreter is None:
+    global c
+    if _interpreter is None:
         raise RuntimeError("Interpreter not initialized yet.")
-    return interpreter
+    return _interpreter
 
 class InterpreterBase(ABC):
 
     def __init__(self):
-        global interpreter
+        global _interpreter
         self._interpreter_impl = None
-        interpreter = self
+        _interpreter = self
     
     def _set_interpreter_impl(self, interpreter_impl):
         self._interpreter_impl = interpreter_impl
 
-
-    
-
-    # redirection layer. The  _ prefixed methods
-    # are called by the c++ interpreter implementation.
-    # And the _ prefixed methods call the user defined
-    # functions in a more "pythonic" way and may sanitize
-    # input and output.
-
-    def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
-        self.execute_request(
-            cb=cb,
-            execution_count=execution_count,
-            code=code,
-            silent=silent,
-            store_history=store_history,
-            user_expressions=user_expressions,
-            allow_stdin=allow_stdin
-        )
     
     def _kernel_info_request(self):
         return self.kernel_info_request()
@@ -150,3 +130,45 @@ class InterpreterBase(ABC):
     def redirect_output(self, func):
         with redirect_stdout(func):
             yield
+
+
+
+class BlockingInterpreterBase(InterpreterBase):
+
+    def __init__(self):
+        super().__init__()
+
+    def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
+        ret = self.execute_request(
+            execution_count=execution_count,
+            code=code,
+            silent=silent,
+            store_history=store_history,
+            user_expressions=user_expressions,
+            allow_stdin=allow_stdin
+        )
+        if ret is None:
+            ret = create_successful_reply()
+        cb(ret)
+    
+
+class AsyncInterpreterBase(InterpreterBase):
+
+    def __init__(self):
+        super().__init__()
+    
+    def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
+        loop = asyncio.get_event_loop()
+        async def wrapped(cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
+            ret = await self.execute_request(
+                execution_count=execution_count,
+                code=code,
+                silent=silent,
+                store_history=store_history,
+                user_expressions=user_expressions,
+                allow_stdin=allow_stdin
+            )
+            if ret is None:
+                ret = create_successful_reply()
+            cb(ret)
+        loop.create_task(wrapped(cb, execution_count, code, silent, store_history, user_expressions, allow_stdin))

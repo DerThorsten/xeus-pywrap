@@ -6,35 +6,18 @@ import io
 from contextlib import redirect_stdout
 
 
-class Interpreter(xpywrap.InterpreterBase):
-
-    def __init__(self):
-        super().__init__()
-
+class Interpreter(xpywrap.BlockingInterpreterBase):
 
     def kernel_info_request(self):
-        kernel_res = {}
-        kernel_res["status"] = "ok"
-        kernel_res["protocol_version"] = "5.3"
-        kernel_res["implementation"] = "shakespearelang"
-        kernel_res["implementation_version"] = "0.1.0"
-        kernel_res["language_info"] = {}
-        kernel_res["language_info"]["name"] = "shakespearelang"
-        kernel_res["language_info"]["version"] = "ES6"
-        kernel_res["language_info"]["mimetype"] = "text/x-shakespearelang"
-        kernel_res["language_info"]["file_extension"] = ".spl"
-        kernel_res["language_info"]["pygments_lexer"] = ""
-        kernel_res["language_info"]["codemirror_mode"] = ""
-        kernel_res["language_info"]["nbconvert_exporter"] = ""
-        kernel_res["banner"] = "shakespearelang"
-        kernel_res["debugger"] = False
-        kernel_res["help_links"] = [{}]
-        return kernel_res
+        return xpywrap.create_kernel_info_reply(
+            implementation="shakespearelang",
+            implementation_version="0.1.0",
+            language_name="shakespearelang",
+            language_mimetype="text/x-shakespearelang",
+            language_file_extension=".spl",
+        )
     
-    def execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
-        # print("execute_request", execution_count, code, silent, store_history, user_expressions, allow_stdin)
-
-        print("code", code)
+    def execute_request(self, execution_count, code, silent, store_history, user_expressions, allow_stdin):
 
         f = io.StringIO(code)
         with io.StringIO() as buf, redirect_stdout(buf):
@@ -45,11 +28,8 @@ class Interpreter(xpywrap.InterpreterBase):
             if output:
                 self.publish_stream('stdout', output)
 
-
-        return cb({"status": "ok", "execution_count": execution_count, "payload": [], "user_expressions": {}})
-
+        return xpywrap.create_successful_reply()
 
 
 def make_interpreter(*args, **kwargs):
-    print("make_interpreter", args, kwargs)
     return Interpreter()

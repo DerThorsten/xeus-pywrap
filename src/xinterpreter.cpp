@@ -84,13 +84,21 @@ def get_request_context():
         m_py_interpreter = py_factory(parameters);
         
         xeus::register_interpreter(this);
-
-        m_py_interpreter.attr("_configure")();
+        try{
+            m_kernel_info_reply = m_py_interpreter.attr("_kernel_info_request")();
+        }
+        catch(std::exception& e){
+            const auto error_message = e.what();
+            std::cerr<<"Error in _kernel_info_request: "<<error_message<<std::endl;
+            std::exit(1);
+        }
         m_kernel_info_reply = m_py_interpreter.attr("_kernel_info_request")();
+        m_py_interpreter.attr("_configure")();
 
         // give the py interpreter a reference to the c++ interpreter
         py::object self = py::cast(this);
         m_py_interpreter.attr("_set_interpreter_impl")(self);
+        
     }
 
     void interpreter::execute_request_impl(send_reply_callback cb,

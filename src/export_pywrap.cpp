@@ -3,6 +3,8 @@
 #include <pybind11_json/pybind11_json.hpp>
 #include "xeus-pywrap/xinterpreter.hpp"
 #include "xeus/xinput.hpp"
+#include "xeus/xhelper.hpp"
+#include <pybind11_json/pybind11_json.hpp>
 
 namespace py = pybind11;
 
@@ -15,6 +17,55 @@ namespace xeus_pywrap
        m.def("blocking_input_request", [](const std::string& prompt, bool password) {
             return xeus::blocking_input_request(prompt, password);
         }, py::arg("prompt"), py::arg("password") = false);
+
+        m.def("create_error_reply", &xeus::create_error_reply, 
+            py::arg("ename") = std::string(), 
+            py::arg("evalue") = std::string(), 
+            py::arg("trace_back") = nl::json::array()
+        );
+
+        m.def("create_successful_reply", &xeus::create_successful_reply, 
+            py::arg("payload") = nl::json::array(), 
+            py::arg("user_expressions") = nl::json::object()
+        );
+
+        m.def("create_complete_reply", &xeus::create_complete_reply, 
+            py::arg("matches"), 
+            py::arg("cursor_start"), 
+            py::arg("cursor_end"), 
+            py::arg("metadata") = nl::json::object()
+        );
+
+        m.def("create_inspect_reply", &xeus::create_inspect_reply, 
+            py::arg("found") = false, 
+            py::arg("data") = nl::json::object(), 
+            py::arg("metadata") = nl::json::object()
+        );
+
+        m.def("create_is_complete_reply", &xeus::create_is_complete_reply, 
+            py::arg("status") = std::string(), 
+            py::arg("indent") = std::string("")
+        );
+
+        m.def("create_kernel_info_reply", &xeus::create_info_reply, 
+            py::arg("implementation") = std::string(), 
+            py::arg("implementation_version") = std::string(), 
+            py::arg("language_name") = std::string(), 
+            py::arg("language_version") = std::string(), 
+            py::arg("language_mimetype") = std::string(), 
+            py::arg("language_file_extension") = std::string(), 
+            py::arg("pygments_lexer") = std::string(), 
+            py::arg("language_codemirror_mode") = std::string(), 
+            py::arg("language_nbconvert_exporter") = std::string(), 
+            py::arg("banner") = std::string(), 
+            py::arg("help_links") = nl::json::array(), 
+            py::arg("supported_features") = std::vector<std::string>()
+        );
+
+        m.def("create_shutdown_reply", &xeus::create_shutdown_reply, py::arg("restart"));
+
+        m.def("create_interrupt_reply", &xeus::create_interrupt_reply);
+
     }
     
     void export_interpreter(py::module& m)
@@ -27,7 +78,7 @@ namespace xeus_pywrap
 
         // request config
         py::class_<xeus::execute_request_config>(m, "execute_request_config")
-            .def(py::init<>())
+            // .def(py::init<>())
             .def_readwrite("silent", &xeus::execute_request_config::silent)
             .def_readwrite("store_history", &xeus::execute_request_config::store_history)
             .def_readwrite("allow_stdin", &xeus::execute_request_config::allow_stdin)
@@ -41,8 +92,6 @@ namespace xeus_pywrap
             .def("publish_execution_input", &interpreter::publish_execution_input)
             .def("publish_execution_result", &interpreter::publish_execution_result)
             .def("publish_execution_error", &interpreter::publish_execution_error)
-
-
         ;
     }
 
