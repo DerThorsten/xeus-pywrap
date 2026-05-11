@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
+import traceback
 from contextlib import redirect_stdout, contextmanager
 
+from _xpywrap import create_successful_reply, create_error_reply
 
 # since there is only one interpreter per process, we can use a global variable to store the interpreter instance.
 _interpreter = None
@@ -139,28 +141,8 @@ class BlockingInterpreterBase(InterpreterBase):
         super().__init__()
 
     def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
-        ret = self.execute_request(
-            execution_count=execution_count,
-            code=code,
-            silent=silent,
-            store_history=store_history,
-            user_expressions=user_expressions,
-            allow_stdin=allow_stdin
-        )
-        if ret is None:
-            ret = create_successful_reply()
-        cb(ret)
-    
-
-class AsyncInterpreterBase(InterpreterBase):
-
-    def __init__(self):
-        super().__init__()
-    
-    def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
-        loop = asyncio.get_event_loop()
-        async def wrapped(cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
-            ret = await self.execute_request(
+        try:
+            ret = self.execute_request(
                 execution_count=execution_count,
                 code=code,
                 silent=silent,
@@ -171,4 +153,38 @@ class AsyncInterpreterBase(InterpreterBase):
             if ret is None:
                 ret = create_successful_reply()
             cb(ret)
+        except Exception as e:
+            # In case of an exception, we want to return an error reply instead of a successful one.
+            tb = traceback.format_exc()
+            self.publish_stderr(tb)
+            ret = create_error_reply(ename=type(e).__name__, evalue=str(e), trace_back=tb.splitlines())
+    
+
+class AsyncInterpreterBase(InterpreterBase):
+
+    def __init__(self):
+        super().__init__()
+    
+    def _execute_request(self, cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
+        loop = asyncio.get_event_loop()
+        async def wrapped(cb, execution_count, code, silent, store_history, user_expressions, allow_stdin):
+            try:
+                ret = await self.execute_request(
+                    execution_count=execution_count,
+                    code=code,
+                    silent=silent,
+                    store_history=store_history,
+                    user_expressions=user_expressions,
+                    allow_stdin=allow_stdin
+                )
+                if ret is None:
+                    ret = create_successful_reply()
+                cb(ret)
+            except Exception as e:
+  
+                tb = traceback.format_exc()
+                self.publish_stderr(tb)
+                ret = create_error_reply(ename=type(e).__name__, evalue=str(e), trace_back=tb.splitlines())
+                cb(ret)
+                
         loop.create_task(wrapped(cb, execution_count, code, silent, store_history, user_expressions, allow_stdin))

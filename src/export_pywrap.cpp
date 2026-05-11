@@ -47,7 +47,35 @@ namespace xeus_pywrap
             py::arg("indent") = std::string("")
         );
 
-        m.def("create_kernel_info_reply", &xeus::create_info_reply, 
+        m.def("create_kernel_info_reply", [](
+                const std::string& implementation = std::string(),
+                const std::string& implementation_version = std::string(),
+                const std::string& language_name = std::string(),
+                const std::string& language_version = std::string(),
+                const std::string& language_mimetype = std::string(),
+                const std::string& language_file_extension = std::string(),
+                const std::string& pygments_lexer = std::string(),
+                const nl::json& language_codemirror_mode = nl::json::object(),
+                const std::string& language_nbconvert_exporter = std::string(),
+                const std::string& banner = std::string(),
+                const nl::json& help_links = nl::json::array(),
+                const std::vector<std::string>& supported_features = std::vector<std::string>()
+        ){
+            return xeus::create_info_reply(
+                implementation,
+                implementation_version,
+                language_name,
+                language_version,
+                language_mimetype,
+                language_file_extension,
+                pygments_lexer,
+                language_codemirror_mode,
+                language_nbconvert_exporter,
+                banner,
+                help_links,
+                supported_features
+            );
+        },
             py::arg("implementation") = std::string(), 
             py::arg("implementation_version") = std::string(), 
             py::arg("language_name") = std::string(), 
@@ -55,12 +83,13 @@ namespace xeus_pywrap
             py::arg("language_mimetype") = std::string(), 
             py::arg("language_file_extension") = std::string(), 
             py::arg("pygments_lexer") = std::string(), 
-            py::arg("language_codemirror_mode") = std::string(), 
+            py::arg("language_codemirror_mode") =  nl::json::object(),
             py::arg("language_nbconvert_exporter") = std::string(), 
             py::arg("banner") = std::string(), 
             py::arg("help_links") = nl::json::array(), 
             py::arg("supported_features") = std::vector<std::string>()
         );
+       
 
         m.def("create_shutdown_reply", &xeus::create_shutdown_reply, py::arg("restart"));
 

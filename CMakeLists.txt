@@ -405,6 +405,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/module/ DESTINATION ${XEUS_PYWRAP_
 option(XEUS_PYWRAP_INSTALL_XEUS_ECHO_KERNEL "Install xeus_echo example kernel" ON)
 option(XEUS_PYWRAP_INSTALL_XEUS_BRAINFUCK_KERNEL "Install xeus_brainfuck example kernel" ON)
 option(XEUS_PYWRAP_INSTALL_XEUS_SHAKESPEARELANG_KERNEL "Install xeus_shakespearelang example kernel" ON)
+option(XEUS_PYWRAP_INSTALL_XEUS_BASIC_KERNEL "Install xeus_basic example kernel" ON)
 
 SET(EXAMPLE_KERNELS )
 
@@ -418,6 +419,10 @@ endif()
 
 if(XEUS_PYWRAP_INSTALL_XEUS_SHAKESPEARELANG_KERNEL)
     list(APPEND EXAMPLE_KERNELS xeus_shakespearelang)
+endif()
+
+if(XEUS_PYWRAP_INSTALL_XEUS_BASIC_KERNEL)
+    list(APPEND EXAMPLE_KERNELS xeus_basic)
 endif()
 
 # iterate over example kernels and install them

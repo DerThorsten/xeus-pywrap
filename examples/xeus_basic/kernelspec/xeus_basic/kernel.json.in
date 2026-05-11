@@ -1,0 +1,15 @@
+{
+  "display_name": "xeus-basic",
+  "argv": [
+      "@XEUS_PYWRAP_KERNELSPEC_PATH@xpywrap",
+      "--module",
+      "xeus_basic",
+      "--factory",
+      "make_interpreter",
+      "--connection",
+      "{connection_file}"
+  ],
+  "language": "basic",
+  "metadata": {"debugger": false
+  }
+}
