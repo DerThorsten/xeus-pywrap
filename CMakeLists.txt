@@ -58,7 +58,7 @@ if(EMSCRIPTEN)
     SET(XEUS_PYWRAP_BUILD_STATIC ON)
     SET(XEUS_PYWRAP_BUILD_SHARED OFF)
     SET(XEUS_PYWRAP_BUILD_EXECUTABLE OFF)
-    SET(XEUS_PYWRAP_USE_SHARED_XEUS OFF)
+    SET(XEUS_PYWRAP_USE_SHARED_XEUS ON)
     SET(XEUS_PYWRAP_USE_SHARED_XEUS_PYWRAP OFF)
     SET(XEUS_PYWRAP_BUILD_TESTS OFF)
 endif()
@@ -323,17 +323,6 @@ if (XEUS_PYWRAP_BUILD_EXECUTABLE)
 endif()
 
 if(EMSCRIPTEN)
-    SET(PYTHON_UTIL_LIBS
-        ${CMAKE_INSTALL_PREFIX}/lib/libbz2.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libz.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libsqlite3.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libffi.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libzstd.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libssl.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libcrypto.a
-        ${CMAKE_INSTALL_PREFIX}/lib/liblzma.a
-    )
-    find_package(zlib REQUIRED)
 
     include(WasmBuildOptions)
     find_package(xeus-lite REQUIRED)
